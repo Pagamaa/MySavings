@@ -1,63 +1,89 @@
-# My Savings Account 
+# My Savings account
 
-## Overview
+This project is a decentralized application (DApp) built on Ethereum using Solidity smart contracts and React. It allows users to interact with a savings account smart contract with additional features such as balance hiding and resetting.
 
-This project is a decentralized application for managing savings using Ethereum smart contracts. Built with React and ethers.js, it interacts with a Solidity smart contract to provide functionalities for depositing, withdrawing, and managing balance in a user-friendly interface.
+## Table of Contents
 
-The Savings Account features a Cyberpunk 2077-inspired theme with neon colors and a futuristic design.
+- [Project Overview](#project-overview)
+- [Contract Details](#contract-details)
+- [Frontend Details](#frontend-details)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [License](#license)
 
-## Features
+## Project Overview
 
-- Connects to MetaMask wallet
-- Displays account details and balance
-- Allows depositing and withdrawing ETH
-- Option to reset balance
-- Option to hide and unhide balance
+The DApp consists of a smart contract deployed on the Ethereum blockchain and a React frontend for user interaction. The smart contract (`Assessment`) allows for deposits and withdrawals, and includes functionalities to hide or reset the balance.
 
-## Technologies
+The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colors and a futuristic design.
 
-- **React**: Frontend framework for building user interfaces
-- **ethers.js**: Ethereum library for interacting with the blockchain
-- **Solidity**: Programming language for smart contracts
-- **MetaMask**: Ethereum wallet extension
+## Contract Details
 
-### Installation
+### Smart Contract
 
-1. Clone the repository:
+**File:** `Assessment.sol`
 
+**Description:**
+- `Assessment` contract allows deposits and withdrawals.
+- Only the contract owner can interact with the contract.
+- Balance visibility can be controlled by hiding or unhiding it.
+- Balance can be reset to zero.
+
+**Functions:**
+- `constructor(uint initBalance)` - Initializes the contract with a starting balance.
+- `getBalance()` - Returns the current balance of the contract if it is not hidden.
+- `deposit(uint256 _amount)` - Deposits the specified amount (only callable by the owner).
+- `withdraw(uint256 _withdrawAmount)` - Withdraws the specified amount (only callable by the owner).
+- `resetBalance()` - Resets the balance to zero (only callable by the owner).
+- `hideBalance()` - Hides the balance from view (only callable by the owner).
+- `unhideBalance()` - Reveals the balance (only callable by the owner).
+
+**Events:**
+- `Deposit(uint256 amount)` - Emitted when a deposit is made.
+- `Withdraw(uint256 amount)` - Emitted when a withdrawal is made.
+- `BalanceReset()` - Emitted when the balance is reset.
+- `BalanceHidden()` - Emitted when the balance is hidden.
+- `BalanceUnhidden()` - Emitted when the balance is revealed.
+
+**Custom Error:**
+- `InsufficientBalance(uint256 balance, uint256 withdrawAmount)` - Reverts with detailed error if the balance is insufficient for a withdrawal or reset.
+
+### ABI and Address
+
+- **ABI File:** `../artifacts/contracts/Assessment.sol/Assessment.json`
+- **Contract Address:** `0x5FbDB2315678afecb367f032d93F642f64180aa3`
+
+## Frontend Details
+
+**File:** `HomePage.jsx`
+
+**Description:**
+- React component that interacts with the Ethereum smart contract.
+- Allows users to deposit, withdraw, reset, hide, and unhide the balance.
+- Displays the current balance and handles visibility based on user actions.
+
+**State Variables:**
+- `ethWallet` - MetaMask wallet instance.
+- `account` - Current Ethereum account address.
+- `atm` - Instance of the Ethereum smart contract.
+- `balance` - Current balance of the savings account.
+- `depositAmount` - Amount to deposit.
+- `withdrawAmount` - Amount to withdraw.
+- `isHidden` - Boolean to control balance visibility.
+
+**Key Functions:**
+- `getWallet()` - Initializes and retrieves the MetaMask wallet instance.
+- `handleAccount(accounts)` - Handles Ethereum accounts and sets up the smart contract.
+- `connectAccount()` - Connects the user's MetaMask wallet.
+- `getATMContract()` - Retrieves and sets the smart contract instance.
+- `getBalance()` - Fetches and updates the current balance from the smart contract.
+
+**Styles:**
+- Styled using CSS-in-JS with a Cyberpunk 2077-inspired color scheme.
+
+## Setup Instructions
+
+1. **Clone the Repository:**
    ```bash
-   [git clone https://github.com/yourusername/cyberpunk-savings-account.git](https://github.com/Pagamaa/MySavings)
-Navigate to the project directory:
-
-bash
-Copy code
-cd cyberpunk-savings-account
-Install the dependencies:
-
-bash
-Copy code
-npm install
-Configuration
-Create a .env file in the root directory of the project.
-
-Add your Ethereum network and smart contract details to the .env file:
-
-env
-Copy code
-REACT_APP_ETHEREUM_PROVIDER=https://your-ethereum-provider-url
-REACT_APP_CONTRACT_ADDRESS=your-smart-contract-address
-Running the Application
-To start the development server, use the following command:
-
-bash
-Copy code
-npm start
-Navigate to http://localhost:3000 in your browser to view the application.
-
-Build
-To create a production build of the application, run:
-
-bash
-Copy code
-npm run build
-The build artifacts will be stored in the build directory.
+   git clone <repository-url>
+   cd <repository-directory>
