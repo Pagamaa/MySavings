@@ -73,20 +73,3 @@ The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colo
 **Styles:**
 - Styled using CSS-in-JS with a Cyberpunk 2077-inspired color scheme.
 
-## Setup Instructions
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/Pagamaa/MySavings
-   cd MySavings
-
-2. **Install Dependencies:**
-```bash
-   npm install
-4. **Compile and Deploy the Smart Contract:**
-   npx hardhat compile
-   npx hardhat run scripts/deploy.js
-5. **Start the Development Server:**
-   npm run dev
-6. **Open the Application:**
-Navigate to http://localhost:3000 in your browser.
