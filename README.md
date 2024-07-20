@@ -81,11 +81,12 @@ The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colo
    cd MySavings
 
 2. **Install Dependencies:**
+```bash
    npm install
-3. **Compile and Deploy the Smart Contract:**
+4. **Compile and Deploy the Smart Contract:**
    npx hardhat compile
    npx hardhat run scripts/deploy.js
-4. **Start the Development Server:**
+5. **Start the Development Server:**
    npm run dev
-5. **Open the Application:**
+6. **Open the Application:**
 Navigate to http://localhost:3000 in your browser.
