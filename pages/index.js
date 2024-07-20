@@ -13,6 +13,7 @@ export default function HomePage() {
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [isHidden, setIsHidden] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getWallet = async () => {
     if (window.ethereum) {
@@ -70,14 +71,17 @@ export default function HomePage() {
   const deposit = async () => {
     if (atm && depositAmount) {
       try {
+        setLoading(true);
         const amount = ethers.utils.parseEther(depositAmount);
         const tx = await atm.deposit(amount, { value: amount });
         console.log("Deposit transaction:", tx);
         await tx.wait();
         console.log("Deposit confirmed");
-        getBalance(); // Update balance after deposit
+        await getBalance(); // Ensure balance is updated after deposit
       } catch (error) {
         console.error("Error depositing funds:", error);
+      } finally {
+        setLoading(false);
       }
     } else {
       console.log("Invalid deposit amount");
@@ -87,14 +91,17 @@ export default function HomePage() {
   const withdraw = async () => {
     if (atm && withdrawAmount) {
       try {
+        setLoading(true);
         const amount = ethers.utils.parseEther(withdrawAmount);
         const tx = await atm.withdraw(amount);
         console.log("Withdraw transaction:", tx);
         await tx.wait();
         console.log("Withdraw confirmed");
-        getBalance(); // Update balance after withdrawal
+        await getBalance(); // Ensure balance is updated after withdrawal
       } catch (error) {
         console.error("Error withdrawing funds:", error);
+      } finally {
+        setLoading(false);
       }
     } else {
       console.log("Invalid withdraw amount");
@@ -104,13 +111,16 @@ export default function HomePage() {
   const resetBalance = async () => {
     if (atm) {
       try {
+        setLoading(true);
         const tx = await atm.resetBalance();
         console.log("Reset balance transaction:", tx);
         await tx.wait();
         console.log("Reset balance confirmed");
-        getBalance(); // Update balance after reset
+        await getBalance(); // Ensure balance is updated after reset
       } catch (error) {
         console.error("Error resetting balance:", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -134,7 +144,7 @@ export default function HomePage() {
               value={depositAmount}
               onChange={(e) => setDepositAmount(e.target.value)}
             />
-            <button onClick={deposit} disabled={isHidden}>Deposit</button>
+            <button onClick={deposit} disabled={isHidden || loading}>Deposit</button>
             
             <div className="withdraw-section">
               <input
@@ -143,12 +153,13 @@ export default function HomePage() {
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
               />
-              <button onClick={withdraw} disabled={isHidden}>Withdraw</button>
+              <button onClick={withdraw} disabled={isHidden || loading}>Withdraw</button>
             </div>
             
-            <button onClick={resetBalance} disabled={isHidden}>Reset Balance</button>
+            <button onClick={resetBalance} disabled={isHidden || loading}>Reset Balance</button>
             <button onClick={() => setIsHidden(true)}>Hide Balance</button>
             <button onClick={() => { setIsHidden(false); getBalance(); }}>Unhide Balance</button>
+            {loading && <p className="loading-message">Processing...</p>}
           </div>
         ) : (
           <button onClick={connectAccount}>Connect your MetaMask wallet</button>
@@ -224,6 +235,9 @@ export default function HomePage() {
         }
         .withdraw-section input {
           margin-right: 10px; /* Space between input and button */
+        }
+        .loading-message {
+          color: #ffff00; /* Loading Yellow */
         }
       `}</style>
     </main>
