@@ -9,7 +9,7 @@ export default function HomePage() {
   const [ethWallet, setEthWallet] = useState(null);
   const [account, setAccount] = useState(null);
   const [atm, setATM] = useState(null);
-  const [balance, setBalance] = useState(null);
+  const [balance, setBalance] = useState("0.0000");
   const [depositAmount, setDepositAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [isHidden, setIsHidden] = useState(false);
@@ -19,6 +19,8 @@ export default function HomePage() {
       setEthWallet(window.ethereum);
       const accounts = await window.ethereum.request({ method: "eth_accounts" });
       handleAccount(accounts);
+    } else {
+      console.log("MetaMask is not installed");
     }
   };
 
@@ -36,8 +38,12 @@ export default function HomePage() {
       alert("MetaMask wallet is required to connect");
       return;
     }
-    const accounts = await ethWallet.request({ method: "eth_requestAccounts" });
-    handleAccount(accounts);
+    try {
+      const accounts = await ethWallet.request({ method: "eth_requestAccounts" });
+      handleAccount(accounts);
+    } catch (error) {
+      console.error("Error connecting MetaMask:", error);
+    }
   };
 
   const getATMContract = () => {
@@ -64,26 +70,34 @@ export default function HomePage() {
   const deposit = async () => {
     if (atm && depositAmount) {
       try {
-        const tx = await atm.deposit(ethers.utils.parseEther(depositAmount));
+        const amount = ethers.utils.parseEther(depositAmount);
+        const tx = await atm.deposit(amount, { value: amount });
+        console.log("Deposit transaction:", tx);
         await tx.wait();
+        console.log("Deposit confirmed");
         getBalance(); // Update balance after deposit
-        setDepositAmount(""); // Clear input
       } catch (error) {
-        console.error("Error depositing:", error);
+        console.error("Error depositing funds:", error);
       }
+    } else {
+      console.log("Invalid deposit amount");
     }
   };
 
   const withdraw = async () => {
     if (atm && withdrawAmount) {
       try {
-        const tx = await atm.withdraw(ethers.utils.parseEther(withdrawAmount));
+        const amount = ethers.utils.parseEther(withdrawAmount);
+        const tx = await atm.withdraw(amount);
+        console.log("Withdraw transaction:", tx);
         await tx.wait();
+        console.log("Withdraw confirmed");
         getBalance(); // Update balance after withdrawal
-        setWithdrawAmount(""); // Clear input
       } catch (error) {
-        console.error("Error withdrawing:", error);
+        console.error("Error withdrawing funds:", error);
       }
+    } else {
+      console.log("Invalid withdraw amount");
     }
   };
 
@@ -91,8 +105,10 @@ export default function HomePage() {
     if (atm) {
       try {
         const tx = await atm.resetBalance();
+        console.log("Reset balance transaction:", tx);
         await tx.wait();
-        setBalance("0.0000"); // Set balance to zero after reset
+        console.log("Reset balance confirmed");
+        getBalance(); // Update balance after reset
       } catch (error) {
         console.error("Error resetting balance:", error);
       }
