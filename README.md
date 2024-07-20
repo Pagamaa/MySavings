@@ -2,18 +2,10 @@
 
 This project is a decentralized application (DApp) built on Ethereum using Solidity smart contracts and React. It allows users to interact with a savings account smart contract with additional features such as balance hiding and resetting.
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Contract Details](#contract-details)
-- [Frontend Details](#frontend-details)
-- [Setup Instructions](#setup-instructions)
-- [Usage](#usage)
-- [License](#license)
 
 ## Project Overview
 
-The DApp consists of a smart contract deployed on the Ethereum blockchain and a React frontend for user interaction. The smart contract (`Assessment`) allows for deposits and withdrawals, and includes functionalities to hide or reset the balance.
+The SavingsAccount consists of a smart contract deployed on the Ethereum blockchain and a React frontend for user interaction. The smart contract (`Assessment`) allows for deposits and withdrawals, and includes functionalities to hide or reset the balance.
 
 The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colors and a futuristic design.
 
@@ -85,5 +77,15 @@ The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colo
 
 1. **Clone the Repository:**
    ```bash
-git clone <[repository-url>
-cd <repository-directory>](https://github.com/Pagamaa/MySavings)
+   git clone https://github.com/Pagamaa/MySavings
+   cd MySavings
+
+2. **Install Dependencies:**
+   npm install
+3. **Compile and Deploy the Smart Contract:**
+   npx hardhat compile
+   npx hardhat run scripts/deploy.js
+4. **Start the Development Server:**
+   npm run dev
+5. **Open the Application:**
+Navigate to http://localhost:3000 in your browser.
