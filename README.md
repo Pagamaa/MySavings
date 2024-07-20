@@ -85,4 +85,5 @@ The frontend is styled with a Cyberpunk 2077-inspired theme, featuring neon colo
 
 1. **Clone the Repository:**
    ```bash
-[(https://github.com/Pagamaa/MySavings)]
+git clone <[repository-url>
+   cd <repository-directory>](https://github.com/Pagamaa/MySavings)
