@@ -61,6 +61,44 @@ export default function HomePage() {
     }
   };
 
+  const deposit = async () => {
+    if (atm && depositAmount) {
+      try {
+        const tx = await atm.deposit(ethers.utils.parseEther(depositAmount));
+        await tx.wait();
+        getBalance(); // Update balance after deposit
+        setDepositAmount(""); // Clear input
+      } catch (error) {
+        console.error("Error depositing:", error);
+      }
+    }
+  };
+
+  const withdraw = async () => {
+    if (atm && withdrawAmount) {
+      try {
+        const tx = await atm.withdraw(ethers.utils.parseEther(withdrawAmount));
+        await tx.wait();
+        getBalance(); // Update balance after withdrawal
+        setWithdrawAmount(""); // Clear input
+      } catch (error) {
+        console.error("Error withdrawing:", error);
+      }
+    }
+  };
+
+  const resetBalance = async () => {
+    if (atm) {
+      try {
+        const tx = await atm.resetBalance();
+        await tx.wait();
+        setBalance("0.0000"); // Set balance to zero after reset
+      } catch (error) {
+        console.error("Error resetting balance:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     getWallet();
   }, []);
@@ -80,7 +118,7 @@ export default function HomePage() {
               value={depositAmount}
               onChange={(e) => setDepositAmount(e.target.value)}
             />
-            <button onClick={() => deposit()} disabled={isHidden}>Deposit</button>
+            <button onClick={deposit} disabled={isHidden}>Deposit</button>
             
             <div className="withdraw-section">
               <input
@@ -89,10 +127,10 @@ export default function HomePage() {
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
               />
-              <button onClick={() => withdraw()} disabled={isHidden}>Withdraw</button>
+              <button onClick={withdraw} disabled={isHidden}>Withdraw</button>
             </div>
             
-            <button onClick={() => resetBalance()} disabled={isHidden}>Reset Balance</button>
+            <button onClick={resetBalance} disabled={isHidden}>Reset Balance</button>
             <button onClick={() => setIsHidden(true)}>Hide Balance</button>
             <button onClick={() => { setIsHidden(false); getBalance(); }}>Unhide Balance</button>
           </div>
